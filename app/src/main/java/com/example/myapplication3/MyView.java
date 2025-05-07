@@ -5,31 +5,73 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import java.util.ArrayList;
+
 public class MyView extends View {
-    public MyView(Context context) {
+    private ArrayList array_x,array_y;
+    private ArrayList array_status;
+
+
+    public  MyView(Context context){
         super(context);
+
+        array_x = new ArrayList();
+        array_y = new ArrayList();
+        array_status = new ArrayList();
     }
 
-    public MyView(Context context, @Nullable AttributeSet attrs){
-        super(context,attrs);
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        return super.onTouchEvent(event);
+        int x = (int) event.getX();
+        int y = (int) event.getY();
+
+        switch (event.getAction()){
+            case MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_POINTER_DOWN:
+                array_x.add(new Integer(x));
+                array_y.add(new Integer(y));
+                array_status.add(new Boolean(false));
+                invalidate();
+                break;
+        }
     }
+
+    //"public MyView(Context context, @Nullable AttributeSet attrs){
+        //super(context,attrs);}
 
 
     @Override
     protected void onDraw(@NonNull Canvas canvas){
         super.onDraw(canvas);
+        Paint p = new Paint();
+        p.setStyle(Paint.Style.FILL);
+        p.setColor(Color.WHITE);
+        canvas.drawRect(new Rect(0,0,canvas.getWidth(),canvas.getHeight()),p);
 
-        @SuppressLint("DrawAllocation") Paint p = new Paint();
-        p.setColor(Color.BLUE);
-        p.setStrokeWidth(10);
+        p = new Paint();
+        p.setStyle(Paint.Style.STROKE);
+        p.setColor(Color.RED);
 
-        canvas.drawLine(10,20,30,40,p);
+        for (int i=1;i< array_status.size();i++){
+
+            if ((Boolean) array_status.get(i)){
+                int x1=(Integer) array_x.get(i-1);
+                int x2=(Integer) array_x.get(i);
+                int y1=(Integer) array_y.get(i-1);
+                int y2=(Integer) array_y.get(i);
+
+                canvas.drawLine(x1,y1,x2,y2,p);
+            }
+        }
     }
-
 }
