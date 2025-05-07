@@ -23,7 +23,7 @@ public class MyView extends View {
     private ArrayList array_status;
 
 
-    public  MyView(Context context){
+    public MyView(Context context){
         super(context);
 
         array_x = new ArrayList();
@@ -31,7 +31,6 @@ public class MyView extends View {
         array_status = new ArrayList();
     }
 
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         int x = (int) event.getX();
@@ -67,8 +66,9 @@ public class MyView extends View {
 
 
     @Override
-    protected void onDraw(@NonNull Canvas canvas){
+    protected void onDraw(Canvas canvas){
         super.onDraw(canvas);
+
         Paint p = new Paint();
         p.setStyle(Paint.Style.FILL);
         p.setColor(Color.WHITE);
@@ -78,7 +78,7 @@ public class MyView extends View {
         p.setStyle(Paint.Style.STROKE);
         p.setColor(Color.RED);
 
-        for (int i=1;i< array_status.size();i++){
+        for (int i=1; i< array_status.size(); i++){
 
             if ((Boolean) array_status.get(i)){
                 int x1=(Integer) array_x.get(i-1);
