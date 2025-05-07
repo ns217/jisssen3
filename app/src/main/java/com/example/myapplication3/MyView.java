@@ -16,7 +16,8 @@ import androidx.annotation.Nullable;
 import java.util.ArrayList;
 
 public class MyView extends View {
-    private ArrayList array_x,array_y;
+    private ArrayList array_x;
+    private ArrayList array_y;
     private ArrayList array_status;
 
 
