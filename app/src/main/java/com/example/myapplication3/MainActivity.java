@@ -13,7 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-public class MainActivity extends AppCompatActivity implements OnClickListener {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,16 +23,14 @@ public class MainActivity extends AppCompatActivity implements OnClickListener {
         setContentView(new MyView(this));
         //Button b = (Button) findViewById(R.id.button);
         //b.setOnClickListener(this);
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            return insets;
-        });
+        //ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+            //Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            //v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+            //return insets;});
     }
 
-    @Override
-    public void onClick(View v) {
-        Toast.makeText(this,"アプリを終了",Toast.LENGTH_LONG).show();
-        finish();
-    }
+    //@Override
+    //public void onClick(View v) {
+        //Toast.makeText(this,"アプリを終了",Toast.LENGTH_LONG).show();
+        //finish();}
 }
