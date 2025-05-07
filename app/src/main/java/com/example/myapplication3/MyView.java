@@ -32,7 +32,6 @@ public class MyView extends View {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        return super.onTouchEvent(event);
         int x = (int) event.getX();
         int y = (int) event.getY();
 
@@ -44,7 +43,21 @@ public class MyView extends View {
                 array_status.add(new Boolean(false));
                 invalidate();
                 break;
+            case MotionEvent.ACTION_MOVE:
+                array_x.add(new Integer(x));
+                array_y.add(new Integer(y));
+                array_status.add(new Boolean(true));
+                invalidate();
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_POINTER_UP:
+                array_x.add(new Integer(x));
+                array_y.add(new Integer(y));
+                array_status.add(new Boolean(true));
+                invalidate();
+                break;
         }
+        return true;
     }
 
     //"public MyView(Context context, @Nullable AttributeSet attrs){
