@@ -1,36 +1,57 @@
 package com.example.myapplication3;
 
-import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.Toast;
+import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends Activity implements SensorEventListener {
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    private SensorManager manager;
+
+    public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
-        //EdgeToEdge.enable(this);
-        //setContentView(R.layout.activity_main);
-        setContentView(new MyView(this));
-        //Button b = (Button) findViewById(R.id.button);
-        //b.setOnClickListener(this);
-        //ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
-            //Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
-            //v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
-            //return insets;});
+        setContentView(R.layout.activity_main);
+
+        manager = (SensorManager) getSystemService(SENSOR_SERVICE);
     }
 
-    //@Override
-    //public void onClick(View v) {
-        //Toast.makeText(this,"アプリを終了",Toast.LENGTH_LONG).show();
-        //finish();}
+    public void  onResume() {
+        super.onResume();
+
+        List<Sensor> sensors = manager.getSensorList(Sensor.TYPE_LIGHT);
+
+        if (sensors.size() != 0){
+            Sensor sensor = sensors.get(0);
+            manager.registerListener(this,sensor,SensorManager.SENSOR_DELAY_NORMAL);
+
+        }
+    }
+
+    protected  void  onPause(){
+        super.onPause();
+        manager.unregisterListener(this);
+    }
+
+    @Override
+    public void onAccuracyChanged(Sensor arg0, int arg1) {
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent arg0) {
+        if (arg0.sensor.getType() == Sensor.TYPE_LIGHT){
+            float intensity = arg0.values[0];
+            String str =Float.toString(intensity)+"ルクス";
+            TextView textView = (TextView) findViewById(R.id.status_text);
+            textView.setText(str);
+        }
+
+    }
+
 }

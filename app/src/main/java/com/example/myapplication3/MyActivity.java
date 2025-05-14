@@ -48,7 +48,7 @@ public class MyActivity extends Activity implements SensorEventListener {
         if (arg0.sensor.getType() == Sensor.TYPE_LIGHT){
             float intensity = arg0.values[0];
             String str =Float.toString(intensity)+"ルクス";
-            TextView textView = (TextView) findViewById(R.id.main);
+            TextView textView = (TextView) findViewById(R.id.status_text);
             textView.setText(str);
         }
 
