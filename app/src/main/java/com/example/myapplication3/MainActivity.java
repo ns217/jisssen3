@@ -1,81 +1,43 @@
 package com.example.myapplication3;
 
-import android.Manifest;
-import android.app.Activity;
-import android.content.pm.PackageManager;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.media.AudioFormat;
-import android.media.AudioRecord;
-import android.media.MediaRecorder;
+import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
-import androidx.core.app.ActivityCompat;
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
-import java.util.List;
-
-public class MainActivity extends Activity implements LocationListener {
-
-    private LocationManager manager;
-
-    public void onCreate(Bundle savedInstanceState){
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        manager = (LocationManager)getSystemService(LOCATION_SERVICE);
-    }
-
-    public void  onResume() {
-        super.onResume();
-        final int FREQUENCY = 8000;
-
-        int bufsize = AudioRecord.getMinBufferSize(FREQUENCY, AudioFormat.CHANNEL_CONFIGURATION_MONO,AudioFormat.ENCODING_PCM_16BIT);
-        short[] buf = new short[bufsize];
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            return;
-        }
-        AudioRecord rec = new AudioRecord(MediaRecorder.AudioSource.MIC,FREQUENCY,AudioFormat.CHANNEL_CONFIGURATION_MONO,AudioFormat.ENCODING_PCM_16BIT,bufsize);
-
-        rec.startRecording();
-
-        rec.stop();
-        rec.release();
-
-        rec.read(buf,0,bufsize);
-
-        int datasize = rec.read(buf, 0, bufsize),max=0;
-        for (int i=0; i<datasize; i++){
-            if ((buf[i]>0) && (buf[i]>max)){ max=buf[i];}
-            if ((buf[i]<0) && (buf[i]<-max)){ max=-buf[i];}}
-        String str = Integer.toString(max);
-        Toast.makeText(this,str,Toast.LENGTH_SHORT).show();
-    }
-
-
-
-    protected void onPause(){
-        super.onPause();
-        manager.removeUpdates(this);
-    }
+public class MainActivity extends AppCompatActivity {
 
     @Override
-    public void onLocationChanged(@NonNull Location location) {
-        double lat = location.getLatitude();
-        double lng = location.getLongitude();
-        Toast.makeText(this,String.format("%.3f %.3f", lat,lng),Toast.LENGTH_SHORT).show();
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        //EdgeToEdge.enable(this);
+        //setContentView(R.layout.activity_main);
+        setContentView(new MyView(this));
+        //Button b = (Button) findViewById(R.id.button);
+        //b.setOnClickListener(this);
+        //ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
+        //Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+        //v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
+        //return insets;});
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+
+        CameraView camview=new CameraView(this);
+        this.setContentView(camview);
     }
+
+    //@Override
+    //public void onClick(View v) {
+    //Toast.makeText(this,"アプリを終了",Toast.LENGTH_LONG).show();
+    //finish();}
 }
