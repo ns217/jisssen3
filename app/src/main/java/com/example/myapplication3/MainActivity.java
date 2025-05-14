@@ -17,8 +17,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     public void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        manager = (SensorManager) getSystemService(SENSOR_SERVICE);
+        manager = (SensorManager)getSystemService(SENSOR_SERVICE);
     }
 
     public void  onResume() {
@@ -47,7 +46,7 @@ public class MainActivity extends Activity implements SensorEventListener {
     public void onSensorChanged(SensorEvent arg0) {
         if (arg0.sensor.getType() == Sensor.TYPE_LIGHT){
             float intensity = arg0.values[0];
-            String str =Float.toString(intensity)+"ルクス";
+            String str = Float.toString(intensity)+"ルクス";
             TextView textView = (TextView) findViewById(R.id.status_text);
             textView.setText(str);
         }
