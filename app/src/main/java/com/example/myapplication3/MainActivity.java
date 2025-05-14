@@ -44,9 +44,11 @@ public class MainActivity extends Activity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent arg0) {
-        if (arg0.sensor.getType() == Sensor.TYPE_LIGHT){
-            float intensity = arg0.values[0];
-            String str = Float.toString(intensity)+"ルクス";
+        if (arg0.sensor.getType() == Sensor.TYPE_MAGNETIC_FIELD){
+            float x = arg0.values[0];
+            float y = arg0.values[1];
+            float z = arg0.values[2];
+            String str = Float.toString(x)+","+ Float.toString(y)+","+ Float.toString(z);
             TextView textView = (TextView) findViewById(R.id.status_text);
             textView.setText(str);
         }
