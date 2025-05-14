@@ -10,6 +10,9 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioFormat;
+import android.media.AudioRecord;
+import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,8 +34,11 @@ public class MainActivity extends Activity implements LocationListener {
 
     public void  onResume() {
         super.onResume();
+        final int FREQUENCY = 8000;
 
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        int bufsize = AudioRecord.getMinBufferSize(FREQUENCY, AudioFormat.CHANNEL_CONFIGURATION_MONO,AudioFormat.ENCODING_PCM_16BIT);
+        short[] buf = new short[bufsize];
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
             // here to request the missing permissions, and then overriding
@@ -42,9 +48,24 @@ public class MainActivity extends Activity implements LocationListener {
             // for ActivityCompat#requestPermissions for more details.
             return;
         }
-        manager.requestLocationUpdates(LocationManager.GPS_PROVIDER,1000,10,this);
+        AudioRecord rec = new AudioRecord(MediaRecorder.AudioSource.MIC,FREQUENCY,AudioFormat.CHANNEL_CONFIGURATION_MONO,AudioFormat.ENCODING_PCM_16BIT,bufsize);
 
-        }
+        rec.startRecording();
+
+        rec.stop();
+        rec.release();
+
+        rec.read(buf,0,bufsize);
+
+        int datasize = rec.read(buf, 0, bufsize),max=0;
+        for (int i=0; i<datasize; i++){
+            if ((buf[i]>0) && (buf[i]>max)){ max=buf[i];}
+            if ((buf[i]<0) && (buf[i]<-max)){ max=-buf[i];}}
+        String str = Integer.toString(max);
+        Toast.makeText(this,str,Toast.LENGTH_SHORT).show();
+    }
+
+
 
     protected void onPause(){
         super.onPause();
