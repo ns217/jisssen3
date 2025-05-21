@@ -22,7 +22,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         //EdgeToEdge.enable(this);
         //setContentView(R.layout.activity_main);
-        setContentView(new MyView(this));
+        //setContentView(new MyView(this));
         //Button b = (Button) findViewById(R.id.button);
         //b.setOnClickListener(this);
         //ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
